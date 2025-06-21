@@ -1,0 +1,13 @@
+USE Pomodoro; 
+
+IF OBJECT_ID('Projects') IS NULL
+BEGIN
+	CREATE TABLE Projects (
+		Id INT IDENTITY(1,1) NOT NULL,
+		[Name] VARCHAR(50) NOT NULL,
+		[Description] VARCHAR(150) NOT NULL,
+		CONSTRAINT PK_Projects
+			PRIMARY KEY (Id)
+	);
+END
+
