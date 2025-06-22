@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Partidoro.Domain;
 using Partidoro.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Partidoro.Services
 {
@@ -42,7 +43,7 @@ namespace Partidoro.Services
                 .ToList()
                 .FirstOrDefault();
         }
-        
+
         public List<RecordModel> GetRecordsByTask(int taskId)
         {
             return _context.Records
@@ -59,6 +60,22 @@ namespace Partidoro.Services
                 .Include(record => record.Project)
                 .Where(record => record.ProjectId == projectId)
                 .ToList();
+        }
+
+        public int GetTotalElapsedTimeByTask(int taskId)
+        {
+            return (int)_context.Records
+                .Include(record => record.Task)
+                .Where(record => record.TaskId == taskId)
+                .Max(record => record.ElapsedTime.TotalMinutes);
+        }
+
+        public int GetTotalElapsedTimeByProject(int projectId)
+        {
+            return (int)_context.Records
+                .Include(record => record.Task)
+                .Where(record => record.ProjectId == projectId)
+                .Max(record => record.ElapsedTime.TotalMinutes);
         }
     }
 }

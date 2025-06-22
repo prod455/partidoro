@@ -33,7 +33,8 @@ namespace Partidoro.Application.Cli.Commands
                 new TableColumn("[yellow]Date[/]").LeftAligned(),
                 new TableColumn("[yellow]Project[/]").Centered(),
                 new TableColumn("[yellow]Task[/]").Centered(),
-                new TableColumn("[yellow]Elapsed minutes[/]").RightAligned()
+                new TableColumn("[yellow]Elapsed minutes (task)[/]").RightAligned(),
+                new TableColumn("[yellow]Elapsed minutes (project)[/]").RightAligned()
             );
 
             foreach (RecordModel record in records)
@@ -43,7 +44,8 @@ namespace Partidoro.Application.Cli.Commands
                     $"{record.RecordDate:d} {record.RecordDate:t} - {record.RecordDate.Add(record.ElapsedTime):t}",
                     record.Project?.Name ?? "[grey]None[/]",
                     record.Task?.Title ?? "[grey]None[/]",
-                    Math.Round(record.ElapsedTime.TotalMinutes).ToString()
+                    record.Task != null ? $"{_recordService.GetTotalElapsedTimeByTask(record.Task.Id)} / {25 * record.Task.EstimatedQuantity}" : "0",
+                    record.Project != null ? _recordService.GetTotalElapsedTimeByProject(record.Project.Id).ToString() : "0"
                 );
             }
 

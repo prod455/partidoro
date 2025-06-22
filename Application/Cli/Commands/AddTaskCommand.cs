@@ -8,32 +8,43 @@ namespace Partidoro.Application.Cli.Commands
     public class AddTaskCommand : Command<AddTaskCommand.Settings>
     {
         private readonly TaskService _taskService;
+        private readonly ProjectService _projectService;
 
-        public AddTaskCommand(TaskService taskService)
+        public AddTaskCommand(TaskService taskService, ProjectService projectService)
         {
             _taskService = taskService;
+            _projectService = projectService;
         }
 
         public override int Execute(CommandContext context, Settings settings)
         {
-            TaskModel task = new TaskModel()
+            try
             {
-                Title = settings.Title,
-                ActualQuantity = settings.ActualQuantity,
-                EstimatedQuantity = settings.EstimatedQuantity,
-                Note = settings.Note
-            };
+                TaskModel task = new TaskModel()
+                {
+                    Title = settings.Title,
+                    ActualQuantity = settings.ActualQuantity,
+                    EstimatedQuantity = settings.EstimatedQuantity,
+                    Note = settings.Note
+                };
 
-            if (settings.ProjectId != null)
-            {
-                task.ProjectId = settings.ProjectId;
+                if (settings.ProjectId != null)
+                {
+                    task.Project = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
+                }
+
+                _taskService.AddTask(task);
+
+                AnsiConsole.Markup($"[yellow]Added task[/]: {task.Id} - {task.Title}");
+
+                return 0;
             }
+            catch (Exception ex)
+            {
+                AnsiConsole.WriteException(ex);
 
-            _taskService.AddTask(task);
-
-            AnsiConsole.Markup($"[yellow]Added task[/]: {task.Id} - {task.Title}");
-
-            return 0;
+                return -1;
+            }
         }
 
         public class Settings : CommandSettings

@@ -28,12 +28,9 @@ namespace Partidoro.Application.Cli.Commands
 
                 if (settings.ProjectId != null)
                 {
-                    ProjectModel? project = _projectService.GetProjectById(settings.ProjectId.Value);
-                    if (project != null)
-                    {
-                        taskDb.Project = project;
-                        _taskService.UpdateTask(taskDb);
-                    }
+                    ProjectModel project = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
+                    taskDb.Project = project;
+                    _taskService.UpdateTask(taskDb);
                 }
 
                 AnsiConsole.Markup($"[yellow]Updated task[/]: {taskDb.Id} - {taskDb.Title}");

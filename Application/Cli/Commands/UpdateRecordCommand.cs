@@ -22,30 +22,27 @@ namespace Partidoro.Application.Cli.Commands
         {
             try
             {
-                RecordModel? recordDb = _recordService.GetRecordById(settings.RecordId);
-                if (recordDb == null)
+                RecordModel? recordDb = _recordService.GetRecordById(settings.RecordId) ?? throw new ApplicationException("Record not found");
+                
+                if (settings.TaskId == null && settings.ProjectId == null)
                 {
-                    throw new ApplicationException("Record not found");
+                    AnsiConsole.Markup("[yellow]Nothing to update[/].");
+                    
+                    return 0;
                 }
 
                 if (settings.TaskId != null)
                 {
-                    TaskModel? task = _taskService.GetTaskById(settings.TaskId.Value);
-                    if (task != null)
-                    {
-                        recordDb.Task = task;
-                        _recordService.UpdateRecord(recordDb);
-                    }
+                    TaskModel task = _taskService.GetTaskById(settings.TaskId.Value) ?? throw new ApplicationException("Task not found");
+                    recordDb.Task = task;
+                    _recordService.UpdateRecord(recordDb);
                 }
 
                 if (settings.ProjectId != null)
                 {
-                    ProjectModel? project = _projectService.GetProjectById(settings.ProjectId.Value);
-                    if (project != null)
-                    {
-                        recordDb.Project = project;
-                        _recordService.UpdateRecord(recordDb);
-                    }
+                    ProjectModel? project = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
+                    recordDb.Project = project;
+                    _recordService.UpdateRecord(recordDb);
                 }
 
                 AnsiConsole.Markup($"[yellow]Updated record[/]: {recordDb.Id} - {recordDb.Task}");
