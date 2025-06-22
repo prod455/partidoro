@@ -11,6 +11,8 @@ namespace Partidoro.EntityFrameworkCore
         {
             builder.ToTable("Records");
 
+            builder.ToTable(record => record.HasTrigger("Records_RecordDate"));
+
             builder.HasKey(record => record.Id);
 
             builder.Property(record => record.Id)
