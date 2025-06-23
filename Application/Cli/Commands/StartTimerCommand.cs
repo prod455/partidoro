@@ -144,8 +144,13 @@ namespace Partidoro.Application.Cli.Commands
                                     }
                                     AppNotificationService.Show(notificationMessage);
                                 }
-                                if (++actualQuantity < estimatedQuantity)
+                                if (estimatedQuantity > actualQuantity)
                                 {
+                                    actualQuantity++;
+                                }
+                                else if (actualQuantity > estimatedQuantity)
+                                {
+                                    actualQuantity++;
                                     estimatedQuantity++;
                                 }
                                 paused = true;
@@ -175,9 +180,10 @@ namespace Partidoro.Application.Cli.Commands
 
                     if (taskDb != null)
                     {
+                        taskDb.ActualQuantity = actualQuantity;
+                        taskDb.EstimatedQuantity = estimatedQuantity;
+                        _taskService.UpdateTask(taskDb);
                         record.Task = taskDb;
-                        record.Task.ActualQuantity = actualQuantity;
-                        record.Task.EstimatedQuantity = estimatedQuantity;
                     }
 
                     if (projectDb != null)
@@ -196,9 +202,10 @@ namespace Partidoro.Application.Cli.Commands
 
                     if (taskDb != null)
                     {
+                        taskDb.ActualQuantity = actualQuantity;
+                        taskDb.EstimatedQuantity = estimatedQuantity;
+                        _taskService.UpdateTask(taskDb);
                         recordDb.Task = taskDb;
-                        recordDb.Task.ActualQuantity = actualQuantity;
-                        recordDb.Task.EstimatedQuantity = estimatedQuantity;
                     }
 
                     if (projectDb != null)

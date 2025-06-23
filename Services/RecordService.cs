@@ -67,7 +67,8 @@ namespace Partidoro.Services
             return (int)_context.Records
                 .Include(record => record.Task)
                 .Where(record => record.TaskId == taskId)
-                .Max(record => record.ElapsedTime.TotalMinutes);
+                .ToList()
+                .Sum(record => record.ElapsedTime.TotalMinutes);
         }
 
         public int GetTotalElapsedTimeByProject(int projectId)
@@ -75,7 +76,8 @@ namespace Partidoro.Services
             return (int)_context.Records
                 .Include(record => record.Task)
                 .Where(record => record.ProjectId == projectId)
-                .Max(record => record.ElapsedTime.TotalMinutes);
+                .ToList()
+                .Sum(record => record.ElapsedTime.TotalMinutes);
         }
     }
 }
