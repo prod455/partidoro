@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Partidoro.Application.Windows;
+﻿using Partidoro.Application.Windows;
 using Partidoro.Domain;
 using Partidoro.Domain.Enums;
 using Partidoro.Services;
@@ -27,21 +26,31 @@ namespace Partidoro.Application.Cli.Commands
             {
                 Dictionary<TimerMode, (int Duration, string Color)> data = (Dictionary<TimerMode, (int Duration, string Color)>?)context.Data ?? new Dictionary<TimerMode, (int Duration, string Color)>();
 
-                int? recordId = settings.RecordId;
                 TimerMode timerMode = TimerMode.Normal;
                 RecordModel? recordDb = null;
+                TaskModel? taskDb = null;
+                ProjectModel? projectDb = null;
                 byte actualQuantity = 1;
                 byte estimatedQuantity = 1;
-                if (recordId != null)
+                
+                if (settings.RecordId != null)
                 {
-                    recordDb = _recordService.GetRecordById(recordId.Value) ?? throw new ApplicationException("Record not found");
+                    recordDb = _recordService.GetRecordById(settings.RecordId.Value) ?? throw new ApplicationException("Record not found");
                     timerMode = recordDb.TimerMode;
-                    if (recordDb.Task != null)
-                    {
-                        actualQuantity = recordDb.Task.ActualQuantity;
-                        estimatedQuantity = recordDb.Task.EstimatedQuantity;
-                    }
                 }
+
+                if (settings.TaskId != null)
+                {
+                    taskDb = _taskService.GetTaskById(settings.TaskId.Value) ?? throw new ApplicationException("Task not found");
+                    actualQuantity = taskDb.ActualQuantity;
+                    estimatedQuantity = taskDb.EstimatedQuantity;
+                }
+
+                if (settings.ProjectId != null)
+                {
+                    projectDb = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
+                }
+
                 TimeSpan remainingTime = TimeSpan.FromMinutes(timerMode switch
                 {
                     TimerMode.Normal => data[TimerMode.Normal].Duration,
@@ -49,18 +58,6 @@ namespace Partidoro.Application.Cli.Commands
                     TimerMode.LongInterval => data[TimerMode.LongInterval].Duration,
                     _ => throw new ApplicationException("Unknown timer mode")
                 });
-
-                TaskModel? taskDb = null;
-                if (settings.TaskId != null)
-                {
-                    taskDb = _taskService.GetTaskById(settings.TaskId.Value) ?? throw new ApplicationException("Task not found");
-                }
-
-                ProjectModel? projectDb = null;
-                if (settings.ProjectId != null)
-                {
-                    projectDb = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
-                }
 
                 TimeSpan elapsedTime = TimeSpan.Zero;
 
@@ -104,9 +101,9 @@ namespace Partidoro.Application.Cli.Commands
                             {
                                 statusMessage += $"[dim {timerColor}]{timerMode}[/] (Paused)";
                             }
-                            if (recordId != null)
+                            if (settings.RecordId != null)
                             {
-                                statusMessage += $" | [yellow]Record ID[/]: {recordId}";
+                                statusMessage += $" | [yellow]Record ID[/]: {settings.RecordId}";
                             }
                             string statusLine = $"{statusMessage}\n";
                             string timerLine = $"[yellow]Timer[/]: {remainingTime:t}\n\n";
@@ -144,15 +141,8 @@ namespace Partidoro.Application.Cli.Commands
                                     }
                                     AppNotificationService.Show(notificationMessage);
                                 }
-                                if (estimatedQuantity > actualQuantity)
-                                {
-                                    actualQuantity++;
-                                }
-                                else if (actualQuantity > estimatedQuantity)
-                                {
-                                    actualQuantity++;
-                                    estimatedQuantity++;
-                                }
+                                actualQuantity++;
+                                estimatedQuantity++;
                                 paused = true;
                             }
 
@@ -182,7 +172,6 @@ namespace Partidoro.Application.Cli.Commands
                     {
                         taskDb.ActualQuantity = actualQuantity;
                         taskDb.EstimatedQuantity = estimatedQuantity;
-                        _taskService.UpdateTask(taskDb);
                         record.Task = taskDb;
                     }
 
@@ -204,7 +193,6 @@ namespace Partidoro.Application.Cli.Commands
                     {
                         taskDb.ActualQuantity = actualQuantity;
                         taskDb.EstimatedQuantity = estimatedQuantity;
-                        _taskService.UpdateTask(taskDb);
                         recordDb.Task = taskDb;
                     }
 

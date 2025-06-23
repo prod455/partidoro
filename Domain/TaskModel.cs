@@ -41,5 +41,7 @@
         }
         public int? ProjectId { get; set; }
         public ProjectModel? Project { get; set; }
+        //public ICollection<RecordModel> Records { get; set; } = new List<RecordModel>();
+
     }
 }

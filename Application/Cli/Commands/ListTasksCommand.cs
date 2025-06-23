@@ -43,7 +43,7 @@ namespace Partidoro.Application.Cli.Commands
                 new TableColumn("[yellow]Id[/]").RightAligned(),
                 new TableColumn("[yellow]Title[/]").LeftAligned(),
                 new TableColumn("[yellow]Project[/]").LeftAligned(),
-                new TableColumn("[yellow]Pomodoro quantity[/]").Centered()
+                new TableColumn("[yellow]Elapsed/estimated[/]").Centered()
             );
 
             foreach (TaskModel task in tasks)

@@ -33,6 +33,9 @@ namespace Partidoro.EntityFrameworkCore
             builder.HasOne(task => task.Project)
                 .WithMany(project => project.Tasks)
                 .HasForeignKey(task => task.ProjectId);
+
+            //builder.HasMany(task => task.Records)
+            //    .WithOne(record => record.Task);
             
             builder.Navigation(task => task.Project);
         }
