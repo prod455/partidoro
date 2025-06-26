@@ -11,15 +11,12 @@ namespace Partidoro.EntityFrameworkCore
         {
             builder.ToTable("Records");
 
-            builder.ToTable(record => record.HasTrigger("Records_RecordDate"));
-
             builder.HasKey(record => record.Id);
 
             builder.Property(record => record.Id)
                 .ValueGeneratedOnAdd();
 
             builder.Property(record => record.RecordDate)
-                .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("GETDATE()");
 
             builder.Property(record => record.ElapsedTime)

@@ -17,21 +17,3 @@ BEGIN
 			REFERENCES Projects(Id)
 	);
 END
-
-IF OBJECT_ID('Records_RecordDate') IS NULL
-BEGIN
-	CREATE TRIGGER dbo.Records_RecordDate ON dbo.Records 
-		AFTER UPDATE
-	AS
-	BEGIN
-	    SET NOCOUNT ON;
-
-		IF ((SELECT TRIGGER_NESTLEVEL()) > 1) RETURN;
-
-		UPDATE R
-		SET RecordDate = GETDATE()
-		FROM dbo.Records AS R
-		INNER JOIN INSERTED AS I
-			ON I.Id = R.Id;
-	END
-END

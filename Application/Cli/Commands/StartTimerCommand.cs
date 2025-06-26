@@ -26,6 +26,7 @@ namespace Partidoro.Application.Cli.Commands
             {
                 Dictionary<TimerMode, (int Duration, string Color)> data = (Dictionary<TimerMode, (int Duration, string Color)>?)context.Data ?? new Dictionary<TimerMode, (int Duration, string Color)>();
 
+                DateTime recordDate = DateTime.Now;
                 TimerMode timerMode = TimerMode.Normal;
                 RecordModel? recordDb = null;
                 TaskModel? taskDb = null;
@@ -166,6 +167,7 @@ namespace Partidoro.Application.Cli.Commands
                     {
                         ElapsedTime = elapsedTime,
                         TimerMode = timerMode,
+                        RecordDate = recordDate
                     };
 
                     if (taskDb != null)
@@ -191,6 +193,7 @@ namespace Partidoro.Application.Cli.Commands
                 {
                     recordDb.ElapsedTime = elapsedTime;
                     recordDb.TimerMode = timerMode;
+                    recordDb.RecordDate = recordDate;
 
                     if (taskDb != null)
                     {
