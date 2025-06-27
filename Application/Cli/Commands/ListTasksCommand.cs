@@ -43,7 +43,8 @@ namespace Partidoro.Application.Cli.Commands
                 new TableColumn("[yellow]Id[/]").RightAligned(),
                 new TableColumn("[yellow]Title[/]").LeftAligned(),
                 new TableColumn("[yellow]Project[/]").LeftAligned(),
-                new TableColumn("[yellow]Elapsed/estimated[/]").Centered()
+                new TableColumn("[yellow]Elapsed/estimated[/]").Centered(),
+                new TableColumn("[yellow]Note[/]").LeftAligned()
             );
 
             foreach (TaskModel task in tasks)
@@ -52,7 +53,8 @@ namespace Partidoro.Application.Cli.Commands
                     task.Id.ToString(),
                     task.Title,
                     task.Project?.Name ?? "[dim]None[/]",
-                    $"{task.ActualQuantity} / {task.EstimatedQuantity}"
+                    $"{task.ActualQuantity} / {task.EstimatedQuantity}",
+                    string.IsNullOrWhiteSpace(task.Note) ? "[dim]None[/]" : task.Note
                 );
             }
 

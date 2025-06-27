@@ -1,4 +1,5 @@
-﻿using Partidoro.Application.Cli.Settings;
+﻿using Microsoft.IdentityModel.Tokens;
+using Partidoro.Application.Cli.Settings;
 using Partidoro.Domain;
 using Partidoro.Services;
 using Spectre.Console;
@@ -45,14 +46,18 @@ namespace Partidoro.Application.Cli.Commands
 
             table.AddColumns(
                 new TableColumn("[yellow]Id[/]").RightAligned(),
-                new TableColumn("[yellow]Name[/]").LeftAligned()
+                new TableColumn("[yellow]Name[/]").LeftAligned(),
+                new TableColumn("[yellow]Tasks[/]").LeftAligned(),
+                new TableColumn("[yellow]Description[/]").LeftAligned()
             );
 
             foreach (ProjectModel project in projects)
             {
                 table.AddRow(
                     project.Id.ToString(),
-                    project.Name
+                    project.Name,
+                    project.Tasks.Count == 0 ? "[dim]None[/]" : string.Join(",", project.Tasks.Select(task => task.Title)),
+                    string.IsNullOrWhiteSpace(project.Description) ? "[dim]None[/]" : project.Description
                 );
             }
 
