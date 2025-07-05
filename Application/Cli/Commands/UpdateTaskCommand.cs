@@ -90,7 +90,7 @@ namespace Partidoro.Application.Cli.Commands
                 get => _note;
                 set
                 {
-                    if (!string.IsNullOrWhiteSpace(value)) _note = value;
+                    if (!string.IsNullOrWhiteSpace(value)) _title = value[..Math.Min(value.Length, 150)];
                 }
             }
 

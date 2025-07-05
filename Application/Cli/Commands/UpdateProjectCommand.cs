@@ -51,17 +51,17 @@ namespace Partidoro.Application.Cli.Commands
                 get => _name;
                 set
                 {
-                    if (string.IsNullOrWhiteSpace(value)) _name = value;
+                    if (!string.IsNullOrWhiteSpace(value)) _name = value[..Math.Min(value.Length, 50)];
                 }
             }
 
-            [CommandArgument(2, "[description]")]
+            [CommandArgument(0, "[description]")]
             public string Description
             {
                 get => _description;
                 set
                 {
-                    if (string.IsNullOrWhiteSpace(value)) _description = value;
+                    if (!string.IsNullOrWhiteSpace(value)) _description = value[..Math.Min(value.Length, 150)];
                 }
             }
         }
