@@ -2,25 +2,18 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Partidoro.Application.Cli;
-using Partidoro.Application.Cli.Commands;
 using Partidoro.EntityFrameworkCore;
 using Partidoro.Services;
 using Spectre.Console.Cli;
+using Spectre.Console.Cli.Extensions.DependencyInjection;
 
 namespace Pomodoro
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
-
-        public Startup(IConfiguration configuration)
+        public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
-            _configuration = configuration;
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            string connectionString = _configuration.GetConnectionString("PomodoroDbConnection") ?? throw new ApplicationException("Missing ConnectionStrings configuration");
+            string connectionString = configuration.GetConnectionString("PomodoroDbConnection") ?? throw new ApplicationException("Missing ConnectionStrings configuration");
 
             services.AddSingleton<CommandApp>(provider =>
             {
@@ -38,10 +31,8 @@ namespace Pomodoro
                 serviceCollection.AddTransient<TaskService>();
                 serviceCollection.AddTransient<RecordService>();
 
-                TypeRegistrar dependencyInjectionRegistrar = new TypeRegistrar(serviceCollection);
+                return new CommandApp(new DependencyInjectionRegistrar(serviceCollection));
 
-                CommandApp app = new CommandApp(dependencyInjectionRegistrar);
-                return app;
             });
 
             services.AddSingleton<CliApplication>();

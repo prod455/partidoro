@@ -23,8 +23,8 @@ namespace Pomodoro
 
             builder.Configuration.AddEnvironmentVariables();
 
-            Startup startup = new Startup(builder.Configuration);
-            startup.ConfigureServices(builder.Services);
+            Startup startup = new Startup();
+            startup.ConfigureServices(builder.Configuration, builder.Services);
 
             IHost host = builder.Build();
 
