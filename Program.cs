@@ -12,16 +12,6 @@ namespace Pomodoro
     {
         public static void Main(string[] args)
         {
-            ToastNotificationManagerCompat.OnActivated += (e) =>
-            {
-                ToastArguments args = ToastArguments.Parse(e.Argument);
-
-                if (args.TryGetValue("action", out string action) && action == "open")
-                {
-                    WindowsApi.FocusConsole();
-                }
-            };
-
             HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
