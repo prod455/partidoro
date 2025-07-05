@@ -172,11 +172,8 @@ namespace Partidoro.Application.Cli.Commands
 
                     if (taskDb != null)
                     {
-                        if (settings.RecordId != null)
-                        {
-                            taskDb.ActualQuantity = actualQuantity;
-                            taskDb.EstimatedQuantity = estimatedQuantity;
-                        }
+                        taskDb.ActualQuantity = actualQuantity;
+                        taskDb.EstimatedQuantity = estimatedQuantity;
                         record.Task = taskDb;
                     }
 
@@ -197,11 +194,8 @@ namespace Partidoro.Application.Cli.Commands
 
                     if (taskDb != null)
                     {
-                        if (settings.RecordId != null)
-                        {
-                            taskDb.ActualQuantity = actualQuantity;
-                            taskDb.EstimatedQuantity = estimatedQuantity;
-                        }
+                        taskDb.ActualQuantity = actualQuantity;
+                        taskDb.EstimatedQuantity = estimatedQuantity;
                         recordDb.Task = taskDb;
                     }
 
