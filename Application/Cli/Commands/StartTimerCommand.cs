@@ -33,7 +33,7 @@ namespace Partidoro.Application.Cli.Commands
                 ProjectModel? projectDb = null;
                 byte actualQuantity = 1;
                 byte estimatedQuantity = 1;
-                
+
                 if (settings.RecordId != null)
                 {
                     recordDb = _recordService.GetRecordById(settings.RecordId.Value) ?? throw new ApplicationException("Record not found");
@@ -144,6 +144,7 @@ namespace Partidoro.Application.Cli.Commands
                                 }
                                 actualQuantity++;
                                 estimatedQuantity++;
+                                SaveRecord();
                                 paused = true;
                             }
 
@@ -161,53 +162,65 @@ namespace Partidoro.Application.Cli.Commands
                         }
                     });
 
-                if (recordDb == null)
+                SaveRecord(true);
+
+                void SaveRecord(bool print = false)
                 {
-                    RecordModel record = new RecordModel()
+                    if (recordDb == null)
                     {
-                        ElapsedTime = elapsedTime,
-                        TimerMode = timerMode,
-                        RecordDate = recordDate
-                    };
+                        RecordModel record = new RecordModel()
+                        {
+                            ElapsedTime = elapsedTime,
+                            TimerMode = timerMode,
+                            RecordDate = recordDate
+                        };
 
-                    if (taskDb != null)
-                    {
-                        taskDb.ActualQuantity = actualQuantity;
-                        taskDb.EstimatedQuantity = estimatedQuantity;
-                        record.Task = taskDb;
+                        if (taskDb != null)
+                        {
+                            taskDb.ActualQuantity = actualQuantity;
+                            taskDb.EstimatedQuantity = estimatedQuantity;
+                            record.Task = taskDb;
+                        }
+
+                        if (projectDb != null)
+                        {
+                            record.Project = projectDb;
+                        }
+
+                        _recordService.AddRecord(record);
+
+                        if (print)
+                        {
+                            AnsiConsole.Markup($"[yellow]Added record[/]: {record.Id}");
+                        }
                     }
-
-                    if (projectDb != null)
+                    else
                     {
-                        record.Project = projectDb;
+                        recordDb.ElapsedTime = elapsedTime;
+                        recordDb.TimerMode = timerMode;
+                        recordDb.RecordDate = recordDate;
+
+                        if (taskDb != null)
+                        {
+                            taskDb.ActualQuantity = actualQuantity;
+                            taskDb.EstimatedQuantity = estimatedQuantity;
+                            recordDb.Task = taskDb;
+                        }
+
+                        if (projectDb != null)
+                        {
+                            recordDb.Project = projectDb;
+                        }
+
+                        _recordService.UpdateRecord(recordDb);
+
+                        if (print)
+                        {
+                            AnsiConsole.Markup($"[yellow]Updated record[/]: {recordDb.Id}");
+                        }
                     }
-
-                    _recordService.AddRecord(record);
-
-                    AnsiConsole.Markup($"[yellow]Added record[/]: {record.Id}");
                 }
-                else
-                {
-                    recordDb.ElapsedTime = elapsedTime;
-                    recordDb.TimerMode = timerMode;
-                    recordDb.RecordDate = recordDate;
 
-                    if (taskDb != null)
-                    {
-                        taskDb.ActualQuantity = actualQuantity;
-                        taskDb.EstimatedQuantity = estimatedQuantity;
-                        recordDb.Task = taskDb;
-                    }
-
-                    if (projectDb != null)
-                    {
-                        recordDb.Project = projectDb;
-                    }
-
-                    _recordService.UpdateRecord(recordDb);
-
-                    AnsiConsole.Markup($"[yellow]Updated record[/]: {recordDb.Id}");
-                }
                 return 0;
             }
             catch (Exception ex)
