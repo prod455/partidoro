@@ -194,6 +194,8 @@ namespace Partidoro.Application.Cli.Commands
                         {
                             AnsiConsole.Markup($"[yellow]Added record[/]: {record.Id}");
                         }
+
+                        recordDb = record;
                     }
                     else
                     {
