@@ -13,16 +13,16 @@ namespace Partidoro.Services
             _context = context;
         }
 
-        public async void AddTask(TaskModel task)
+        public void AddTask(TaskModel task)
         {
             _context.Add(task);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async void UpdateTask(TaskModel task)
+        public void UpdateTask(TaskModel task)
         {
             _context.Tasks.Update(task);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public List<TaskModel> GetTasks()

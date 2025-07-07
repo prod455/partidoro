@@ -1,4 +1,5 @@
-﻿using Partidoro.Application.Windows;
+﻿using Partidoro.Application.Helpers;
+using Partidoro.Application.Windows;
 using Partidoro.Domain;
 using Partidoro.Domain.Enums;
 using Partidoro.Services;
@@ -187,8 +188,7 @@ namespace Partidoro.Application.Cli.Commands
                             record.Project = projectDb;
                         }
 
-                        for (int retry = 3; retry > 0; retry--)
-                            _recordService.AddRecord(record);
+                        MethodHelper.Retry(() => _recordService.AddRecord(record));
 
                         if (print)
                         {
@@ -213,8 +213,7 @@ namespace Partidoro.Application.Cli.Commands
                             recordDb.Project = projectDb;
                         }
 
-                        for (int retry = 3; retry > 0; retry--)
-                            _recordService.UpdateRecord(recordDb);
+                        MethodHelper.Retry(() => _recordService.UpdateRecord(recordDb));
 
                         if (print)
                         {

@@ -1,4 +1,5 @@
-﻿using Partidoro.Domain;
+﻿using Partidoro.Application.Helpers;
+using Partidoro.Domain;
 using Partidoro.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -36,17 +37,15 @@ namespace Partidoro.Application.Cli.Commands
                 {
                     TaskModel task = _taskService.GetTaskById(settings.TaskId.Value) ?? throw new ApplicationException("Task not found");
                     recordDb.Task = task;
-                    for (int retry = 3; retry < 0; retry--)
-                        _recordService.UpdateRecord(recordDb);
                 }
 
                 if (settings.ProjectId != null)
                 {
                     ProjectModel? project = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
                     recordDb.Project = project;
-                    for (int retry = 3; retry < 0; retry--)
-                        _recordService.UpdateRecord(recordDb);
                 }
+
+                MethodHelper.Retry(() => _recordService.UpdateRecord(recordDb));
 
                 AnsiConsole.Markup($"[yellow]Updated record[/]: {recordDb.Id} - {recordDb.Task}");
 

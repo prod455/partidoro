@@ -1,7 +1,8 @@
-﻿using Partidoro.Services;
+﻿using Partidoro.Application.Helpers;
 using Partidoro.Domain;
-using Spectre.Console.Cli;
+using Partidoro.Services;
 using Spectre.Console;
+using Spectre.Console.Cli;
 
 namespace Partidoro.Application.Cli.Commands
 {
@@ -33,8 +34,7 @@ namespace Partidoro.Application.Cli.Commands
                     task.Project = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
                 }
 
-                for (int retry = 3; retry > 0; retry--)
-                    _taskService.AddTask(task);
+                MethodHelper.Retry(() => _taskService.AddTask(task));
 
                 AnsiConsole.Markup($"[yellow]Added task[/]: {task.Id} - {task.Title}");
 

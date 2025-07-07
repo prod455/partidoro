@@ -1,4 +1,5 @@
-﻿using Partidoro.Domain;
+﻿using Partidoro.Application.Helpers;
+using Partidoro.Domain;
 using Partidoro.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -23,8 +24,7 @@ namespace Partidoro.Application.Cli.Commands
                 projectDb.Name = settings.Name;
                 projectDb.Description = settings.Description;
 
-                for (int retry = 3; retry > 0; retry--)
-                    _projectService.UpdateProject(projectDb);
+                MethodHelper.Retry(() => _projectService.UpdateProject(projectDb));
 
                 AnsiConsole.Markup($"[yellow]Updated project[/]: {projectDb.Id} - {projectDb.Name}");
                 

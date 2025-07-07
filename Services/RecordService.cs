@@ -13,16 +13,16 @@ namespace Partidoro.Services
             _context = context;
         }
 
-        public async void AddRecord(RecordModel record)
+        public void AddRecord(RecordModel record)
         {
             _context.Records.Add(record);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async void UpdateRecord(RecordModel record)
+        public void UpdateRecord(RecordModel record)
         {
             _context.Records.Update(record);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public List<RecordModel> GetRecords()

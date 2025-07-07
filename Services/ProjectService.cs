@@ -13,16 +13,16 @@ namespace Partidoro.Services
             _context = context;
         }
 
-        public async void AddProject(ProjectModel project)
+        public void AddProject(ProjectModel project)
         {
             _context.Projects.Add(project);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async void UpdateProject(ProjectModel project)
+        public void UpdateProject(ProjectModel project)
         {
             _context.Projects.Update(project);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public List<ProjectModel> GetProjects()

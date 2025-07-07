@@ -1,4 +1,5 @@
-﻿using Partidoro.Domain;
+﻿using Partidoro.Application.Helpers;
+using Partidoro.Domain;
 using Partidoro.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -22,8 +23,7 @@ namespace Partidoro.Application.Cli.Commands
                 Description = settings.Description
             };
 
-            for (int retry = 3; retry > 0; retry--)
-                _projectService.AddProject(project);
+            MethodHelper.Retry(() => _projectService.UpdateProject(project));
 
             AnsiConsole.Markup($"[yellow]Added project[/]: {project.Id} - {project.Name}");
 
