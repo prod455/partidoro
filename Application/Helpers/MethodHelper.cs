@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Partidoro.Application.Helpers
+﻿namespace Partidoro.Application.Helpers
 {
     public static class MethodHelper
     {
