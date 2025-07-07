@@ -15,6 +15,7 @@
                 {
                     if (retry == maxRetries)
                         throw;
+                    Thread.Sleep(2000);
                 }
             }
         }
