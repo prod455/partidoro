@@ -30,7 +30,8 @@ namespace Partidoro.Application.Cli.Commands
                 {
                     ProjectModel project = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
                     taskDb.Project = project;
-                    _taskService.UpdateTask(taskDb);
+                    for (int retry = 3; retry > 0; retry--)
+                        _taskService.UpdateTask(taskDb);
                 }
 
                 AnsiConsole.Markup($"[yellow]Updated task[/]: {taskDb.Id} - {taskDb.Title}");

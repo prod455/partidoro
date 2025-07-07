@@ -22,7 +22,8 @@ namespace Partidoro.Application.Cli.Commands
                 Description = settings.Description
             };
 
-            _projectService.AddProject(project);
+            for (int retry = 3; retry > 0; retry--)
+                _projectService.AddProject(project);
 
             AnsiConsole.Markup($"[yellow]Added project[/]: {project.Id} - {project.Name}");
 

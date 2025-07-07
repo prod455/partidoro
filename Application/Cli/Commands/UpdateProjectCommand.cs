@@ -23,7 +23,8 @@ namespace Partidoro.Application.Cli.Commands
                 projectDb.Name = settings.Name;
                 projectDb.Description = settings.Description;
 
-                _projectService.UpdateProject(projectDb);
+                for (int retry = 3; retry > 0; retry--)
+                    _projectService.UpdateProject(projectDb);
 
                 AnsiConsole.Markup($"[yellow]Updated project[/]: {projectDb.Id} - {projectDb.Name}");
                 

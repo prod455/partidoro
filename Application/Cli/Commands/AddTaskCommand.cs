@@ -33,7 +33,8 @@ namespace Partidoro.Application.Cli.Commands
                     task.Project = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
                 }
 
-                _taskService.AddTask(task);
+                for (int retry = 3; retry > 0; retry--)
+                    _taskService.AddTask(task);
 
                 AnsiConsole.Markup($"[yellow]Added task[/]: {task.Id} - {task.Title}");
 

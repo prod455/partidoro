@@ -187,7 +187,8 @@ namespace Partidoro.Application.Cli.Commands
                             record.Project = projectDb;
                         }
 
-                        _recordService.AddRecord(record);
+                        for (int retry = 3; retry > 0; retry--)
+                            _recordService.AddRecord(record);
 
                         if (print)
                         {
@@ -212,7 +213,8 @@ namespace Partidoro.Application.Cli.Commands
                             recordDb.Project = projectDb;
                         }
 
-                        _recordService.UpdateRecord(recordDb);
+                        for (int retry = 3; retry > 0; retry--)
+                            _recordService.UpdateRecord(recordDb);
 
                         if (print)
                         {
