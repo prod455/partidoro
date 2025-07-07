@@ -21,7 +21,14 @@ namespace Pomodoro
 
                 serviceCollection.AddDbContext<PartidoroDbContext>(options =>
                 {
-                    options.UseSqlServer(connectionString);
+                    options.UseSqlServer(connectionString, options =>
+                    {
+                        options.EnableRetryOnFailure(
+                            maxRetryCount: 5,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null
+                        );
+                    });
 
                     options.EnableDetailedErrors();
                     options.EnableSensitiveDataLogging();

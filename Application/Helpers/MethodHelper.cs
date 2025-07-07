@@ -2,7 +2,7 @@
 {
     public static class MethodHelper
     {
-        public static void Retry(Action action, int maxRetries = 3)
+        public static void Retry(Action action, int maxRetries = 5)
         {
             for (int retry = 1; retry <= maxRetries; retry++)
             {
@@ -15,7 +15,7 @@
                 {
                     if (retry == maxRetries)
                         throw;
-                    Thread.Sleep(2000);
+                    Thread.Sleep((int)Math.Pow(retry, 1000));
                 }
             }
         }
