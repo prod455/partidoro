@@ -181,9 +181,9 @@ namespace Partidoro.Application.Cli.Commands
                         }
                     });
 
-                Task.Run(() => SaveRecord(true));
+                SaveRecord();
 
-                void SaveRecord(bool print = false)
+                void SaveRecord()
                 {
                     if (recordDb == null)
                     {
@@ -208,10 +208,7 @@ namespace Partidoro.Application.Cli.Commands
 
                         MethodHelper.Retry(() => _recordService.AddRecord(record));
 
-                        if (print)
-                        {
-                            AnsiConsole.Markup($"[yellow]Added record[/]: {record.Id}");
-                        }
+                        AnsiConsole.Markup($"[yellow]Added record[/]: {record.Id}");
 
                         recordDb = record;
                     }
@@ -235,10 +232,7 @@ namespace Partidoro.Application.Cli.Commands
 
                         MethodHelper.Retry(() => _recordService.UpdateRecord(recordDb));
 
-                        if (print)
-                        {
-                            AnsiConsole.Markup($"[yellow]Updated record[/]: {recordDb.Id}");
-                        }
+                        AnsiConsole.Markup($"[yellow]Updated record[/]: {recordDb.Id}");
                     }
                 }
 
