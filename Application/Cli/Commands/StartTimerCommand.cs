@@ -34,6 +34,7 @@ namespace Partidoro.Application.Cli.Commands
                 ProjectModel? projectDb = null;
                 byte actualQuantity = 1;
                 byte estimatedQuantity = 1;
+                byte intervalCount = 0;
 
                 if (settings.RecordId != null)
                 {
@@ -44,6 +45,7 @@ namespace Partidoro.Application.Cli.Commands
                     if (recordDb == null)
                         throw new ApplicationException("Record not found");
                     timerMode = recordDb.TimerMode;
+                    intervalCount = recordDb.IntervalCount;
                 }
 
                 if (settings.TaskId != null)
@@ -77,8 +79,6 @@ namespace Partidoro.Application.Cli.Commands
                 });
 
                 TimeSpan elapsedTime = TimeSpan.Zero;
-
-                int intervalCount = 0;
 
                 bool paused = false;
 
@@ -191,7 +191,8 @@ namespace Partidoro.Application.Cli.Commands
                         {
                             ElapsedTime = elapsedTime,
                             TimerMode = timerMode,
-                            RecordDate = recordDate
+                            RecordDate = recordDate,
+                            IntervalCount = intervalCount
                         };
 
                         if (taskDb != null)
@@ -217,6 +218,7 @@ namespace Partidoro.Application.Cli.Commands
                         recordDb.ElapsedTime = elapsedTime;
                         recordDb.TimerMode = timerMode;
                         recordDb.RecordDate = recordDate;
+                        recordDb.IntervalCount = intervalCount;
 
                         if (taskDb != null)
                         {
@@ -260,19 +262,5 @@ namespace Partidoro.Application.Cli.Commands
             [CommandOption("-n|--notification")]
             public bool? Notification { get; set; }
         }
-    }
-
-    public class PomodoroDurationSettings
-    {
-        public int NormalDuration { get; set; }
-        public int IntervalDuration { get; set; }
-        public int LongIntervalDuration { get; set; }
-    }
-
-    public class PomodoroColorSettings
-    {
-        public string NormalColor { get; set; } = null!;
-        public string IntervalColor { get; set; } = null!;
-        public string LongIntervalColor { get; set; } = null!;
     }
 }

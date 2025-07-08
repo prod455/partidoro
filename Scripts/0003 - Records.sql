@@ -7,6 +7,7 @@ BEGIN
 		RecordDate DATETIME DEFAULT GETDATE(),
 		ElapsedTime TIME NOT NULL,
 		TimerMode VARCHAR(12) NOT NULL,
+		IntervalCount TINYINT DEFAULT 0,
 		TaskId INT,
 		ProjectId INT,
 		CONSTRAINT PK_Records_Id

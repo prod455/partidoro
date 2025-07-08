@@ -29,6 +29,9 @@ namespace Partidoro.EntityFrameworkCore
                     timerMode => (TimerMode)Enum.Parse(typeof(TimerMode), timerMode)
                 );
 
+            builder.Property(record => record.IntervalCount)
+                .HasDefaultValue(0);
+
             builder.Property(record => record.TaskId);
 
             builder.Property(record => record.ProjectId);
