@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Partidoro.Application.Cli.Settings;
+using Partidoro.Application.Helpers;
 using Partidoro.Domain;
 using Partidoro.Services;
 using Spectre.Console;
@@ -23,7 +24,11 @@ namespace Partidoro.Application.Cli.Commands
             List<ProjectModel> projects = new List<ProjectModel>();
             if (settings.ProjectId != null)
             {
-                ProjectModel? project = _projectService.GetProjectById(settings.ProjectId.Value);
+                ProjectModel? project = null;
+                MethodHelper.Retry(() =>
+                {
+                    project = _projectService.GetProjectById(settings.ProjectId.Value);
+                });
                 if (project != null)
                 {
                     projects.Add(project);
@@ -31,7 +36,11 @@ namespace Partidoro.Application.Cli.Commands
             }
             else if (settings.TaskId != null)
             {
-                ProjectModel? project = _projectService.GetProjectByTaskId(settings.TaskId.Value);
+                ProjectModel? project = null;
+                MethodHelper.Retry(() =>
+                {
+                    project = _projectService.GetProjectByTaskId(settings.TaskId.Value);
+                });
                 if (project != null)
                 {
                     projects.Add(project);

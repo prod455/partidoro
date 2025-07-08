@@ -1,4 +1,5 @@
 ﻿using Partidoro.Application.Cli.Settings;
+using Partidoro.Application.Helpers;
 using Partidoro.Domain;
 using Partidoro.Services;
 using Spectre.Console;
@@ -9,12 +10,10 @@ namespace Partidoro.Application.Cli.Commands
     public class ListTasksCommand : Command<ListProjectsTasksCommandSettings>
     {
         private readonly TaskService _taskService;
-        private readonly ProjectService _projectService;
 
-        public ListTasksCommand(TaskService taskService, ProjectService projectService)
+        public ListTasksCommand(TaskService taskService)
         {
             _taskService = taskService;
-            _projectService = projectService;
         }
 
         public override int Execute(CommandContext context, ListProjectsTasksCommandSettings settings)
@@ -22,7 +21,11 @@ namespace Partidoro.Application.Cli.Commands
             List<TaskModel> tasks = new List<TaskModel>();
             if (settings.TaskId != null)
             {
-                TaskModel? task = _taskService.GetTaskById(settings.TaskId.Value);
+                TaskModel? task = null;
+                MethodHelper.Retry(() =>
+                {
+                    task = _taskService.GetTaskById(settings.TaskId.Value);
+                });
                 if (task != null)
                 {
                     tasks.Add(task);
@@ -30,11 +33,17 @@ namespace Partidoro.Application.Cli.Commands
             }
             else if (settings.ProjectId != null)
             {
-                tasks = _taskService.GetTasksByProject(settings.ProjectId.Value);
+                MethodHelper.Retry(() =>
+                {
+                    tasks = _taskService.GetTasksByProject(settings.ProjectId.Value);
+                });
             }
             else
             {
-                tasks = _taskService.GetTasks();
+                MethodHelper.Retry(() =>
+                {
+                    tasks = _taskService.GetTasks();
+                });
             }
 
             Table table = new Table();

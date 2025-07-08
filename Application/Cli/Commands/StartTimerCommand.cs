@@ -37,20 +37,35 @@ namespace Partidoro.Application.Cli.Commands
 
                 if (settings.RecordId != null)
                 {
-                    recordDb = _recordService.GetRecordById(settings.RecordId.Value) ?? throw new ApplicationException("Record not found");
+                    MethodHelper.Retry(() =>
+                    {
+                        recordDb = _recordService.GetRecordById(settings.RecordId.Value);
+                    });
+                    if (recordDb == null)
+                        throw new ApplicationException("Record not found");
                     timerMode = recordDb.TimerMode;
                 }
 
                 if (settings.TaskId != null)
                 {
-                    taskDb = _taskService.GetTaskById(settings.TaskId.Value) ?? throw new ApplicationException("Task not found");
+                    MethodHelper.Retry(() =>
+                    {
+                        taskDb = _taskService.GetTaskById(settings.TaskId.Value);
+                    });
+                    if (taskDb == null)
+                        throw new ApplicationException("Task not found");
                     actualQuantity = taskDb.ActualQuantity;
                     estimatedQuantity = taskDb.EstimatedQuantity;
                 }
 
                 if (settings.ProjectId != null)
                 {
-                    projectDb = _projectService.GetProjectById(settings.ProjectId.Value) ?? throw new ApplicationException("Project not found");
+                    MethodHelper.Retry(() =>
+                    {
+                        projectDb = _projectService.GetProjectById(settings.ProjectId.Value);
+                    });
+                    if (projectDb == null)
+                        throw new ApplicationException("Project not found");
                 }
 
                 TimeSpan remainingTime = TimeSpan.FromMinutes(timerMode switch

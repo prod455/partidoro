@@ -1,4 +1,5 @@
-﻿using Partidoro.Domain;
+﻿using Partidoro.Application.Helpers;
+using Partidoro.Domain;
 using Partidoro.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -20,11 +21,20 @@ namespace Partidoro.Application.Cli.Commands
             int? projectId = settings.ProjectId;
             List<RecordModel> records = new List<RecordModel>();
             if (taskId != null)
-                records = _recordService.GetRecordsByTask(taskId.Value);
+                MethodHelper.Retry(() =>
+                {
+                    records = _recordService.GetRecordsByTask(taskId.Value);
+                });
             else if (projectId != null)
-                records = _recordService.GetRecordsByProject(projectId.Value);
+                MethodHelper.Retry(() =>
+                {
+                    records = _recordService.GetRecordsByProject(projectId.Value);
+                });
             else
-                records = _recordService.GetRecords();
+                MethodHelper.Retry(() =>
+                {
+                    records = _recordService.GetRecords();
+                });
 
             Table table = new Table();
 
