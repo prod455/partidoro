@@ -130,6 +130,11 @@ namespace Partidoro.Application.Cli.Commands
 
                             if (remainingTime == TimeSpan.Zero && !paused)
                             {
+                                if (timerMode == TimerMode.Normal)
+                                {
+                                    actualQuantity++;
+                                    estimatedQuantity++;
+                                }
                                 timerMode = timerMode switch
                                 {
                                     TimerMode.Normal when ++intervalCount == 4 => TimerMode.LongInterval,
@@ -158,9 +163,7 @@ namespace Partidoro.Application.Cli.Commands
                                     }
                                     AppNotificationService.Show(notificationMessage);
                                 }
-                                actualQuantity++;
-                                estimatedQuantity++;
-                                SaveRecord();
+                                Task.Run(() => SaveRecord());
                                 paused = true;
                             }
 
@@ -178,7 +181,7 @@ namespace Partidoro.Application.Cli.Commands
                         }
                     });
 
-                SaveRecord(true);
+                Task.Run(() => SaveRecord(true));
 
                 void SaveRecord(bool print = false)
                 {
