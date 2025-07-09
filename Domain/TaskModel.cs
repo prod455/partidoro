@@ -3,8 +3,8 @@
     public class TaskModel
     {
         private string _title = "";
-        private byte _actualQuantity = 1;
-        private byte _estimatedQuantity = 1;
+        private byte _actualQuantity = 0;
+        private byte _estimatedQuantity = 0;
         private string _note = "";
 
         public int Id { get; init; }
@@ -41,7 +41,5 @@
         }
         public int? ProjectId { get; set; }
         public ProjectModel? Project { get; set; }
-        //public ICollection<RecordModel> Records { get; set; } = new List<RecordModel>();
-
     }
 }

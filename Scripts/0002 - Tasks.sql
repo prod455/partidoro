@@ -5,8 +5,8 @@ BEGIN
 	CREATE TABLE Tasks (
 		Id INT IDENTITY(1,1) NOT NULL,
 		Title VARCHAR(50) NOT NULL,
-		ActualQuantity TINYINT DEFAULT 1,
-		EstimatedQuantity TINYINT DEFAULT 1,
+		ActualQuantity TINYINT DEFAULT 0,
+		EstimatedQuantity TINYINT DEFAULT 0,
 		Note VARCHAR(150) NOT NULL,
 		ProjectId INT,
 		CONSTRAINT PK_Tasks_Id

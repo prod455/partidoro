@@ -32,8 +32,8 @@ namespace Partidoro.Application.Cli.Commands
                 RecordModel? recordDb = null;
                 TaskModel? taskDb = null;
                 ProjectModel? projectDb = null;
-                byte actualQuantity = 1;
-                byte estimatedQuantity = 1;
+                byte actualQuantity = 0;
+                byte estimatedQuantity = 0;
                 byte intervalCount = 0;
 
                 if (settings.RecordId != null)
