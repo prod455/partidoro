@@ -24,8 +24,8 @@ namespace Partidoro.Application.Cli.Commands
                 TaskModel? taskDb = _taskService.GetTaskById(settings.TaskId) ?? throw new ApplicationException("Task not found");
 
                 taskDb.Title = settings.Title;
-                taskDb.ActualQuantity = settings.ActualQuantity;
-                taskDb.EstimatedQuantity = settings.EstimatedQuantity;
+                taskDb.ActualQuantity = taskDb.ActualQuantity;
+                taskDb.EstimatedQuantity = taskDb.EstimatedQuantity;
 
                 if (settings.ProjectId != null)
                 {

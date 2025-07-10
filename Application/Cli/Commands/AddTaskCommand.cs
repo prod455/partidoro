@@ -51,8 +51,8 @@ namespace Partidoro.Application.Cli.Commands
         public class Settings : CommandSettings
         {
             private string _title = "";
-            private byte _actualQuantity = 1;
-            private byte _estimatedQuantity = 1;
+            private byte _actualQuantity = 0;
+            private byte _estimatedQuantity = 0;
             private string _note = "";
 
             [CommandArgument(0, "<title>")]

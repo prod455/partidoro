@@ -46,6 +46,16 @@ namespace Partidoro.Application.Cli.Commands
                         throw new ApplicationException("Record not found");
                     timerMode = recordDb.TimerMode;
                     intervalCount = recordDb.IntervalCount;
+                    if (recordDb.Task != null)
+                    {
+                        taskDb = recordDb.Task;
+                        settings.TaskId = null;
+                    }
+                    if (recordDb.Project != null)
+                    {
+                        projectDb = recordDb.Project;
+                        settings.ProjectId = null;
+                    }
                 }
 
                 if (settings.TaskId != null)
@@ -58,6 +68,11 @@ namespace Partidoro.Application.Cli.Commands
                         throw new ApplicationException("Task not found");
                     actualQuantity = taskDb.ActualQuantity;
                     estimatedQuantity = taskDb.EstimatedQuantity;
+                    if (taskDb.Project != null)
+                    {
+                        projectDb = taskDb.Project;
+                        settings.ProjectId = null;
+                    }
                 }
 
                 if (settings.ProjectId != null)

@@ -37,6 +37,11 @@ namespace Partidoro.Application.Cli.Commands
                 {
                     TaskModel task = _taskService.GetTaskById(settings.TaskId.Value) ?? throw new ApplicationException("Task not found");
                     recordDb.Task = task;
+                    if (recordDb.Task.Project != null)
+                    {
+                        recordDb.Project = recordDb.Task.Project;
+                        settings.ProjectId = null;
+                    }
                 }
 
                 if (settings.ProjectId != null)

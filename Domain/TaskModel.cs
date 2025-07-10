@@ -21,7 +21,7 @@
             get => _actualQuantity;
             set
             {
-                if (value >= 1) _actualQuantity = value;
+                if (value > 0) _actualQuantity = value;
             }
         }
         public byte EstimatedQuantity
@@ -29,7 +29,7 @@
             get => _estimatedQuantity;
             set
             {
-                if (value >= 1 && value <= _actualQuantity) _estimatedQuantity = value;
+                if (value > 0 && value <= _actualQuantity) _estimatedQuantity = value;
             }
         }
         public string Note {
