@@ -85,6 +85,11 @@ namespace Partidoro.Application.Cli.Commands
                         throw new ApplicationException("Project not found");
                 }
 
+                if (taskDb != null && projectDb != null && taskDb.Project != projectDb)
+                {
+                    throw new ApplicationException("Selected task doesn't belong to selected project");
+                }
+
                 TimeSpan remainingTime = TimeSpan.FromMinutes(timerMode switch
                 {
                     TimerMode.Normal => data[TimerMode.Normal].Duration,
