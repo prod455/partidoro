@@ -85,7 +85,7 @@ namespace Partidoro.Application.Cli.Commands
                         throw new ApplicationException("Project not found");
                 }
 
-                if (taskDb != null && projectDb != null && taskDb.Project != projectDb)
+                if (taskDb?.Project?.Id != projectDb?.Id)
                 {
                     throw new ApplicationException("Selected task doesn't belong to selected project");
                 }
