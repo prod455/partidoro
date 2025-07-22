@@ -39,7 +39,6 @@ namespace Pomodoro
                 serviceCollection.AddTransient<RecordService>();
 
                 return new CommandApp(new DependencyInjectionRegistrar(serviceCollection));
-
             });
 
             services.AddSingleton<CliApplication>();

@@ -19,6 +19,8 @@ namespace Partidoro.Application.Cli.Commands
         {
             int? taskId = settings.TaskId;
             int? projectId = settings.ProjectId;
+            DateTime? startDate = settings.StartDate;
+            DateTime? endDate = settings.EndDate;
             List<RecordModel> records = new List<RecordModel>();
             if (taskId != null)
                 MethodHelper.Retry(() =>
@@ -35,6 +37,16 @@ namespace Partidoro.Application.Cli.Commands
                 {
                     records = _recordService.GetRecords();
                 });
+
+            if (startDate != null)
+                records = records
+                    .Where(record => record.RecordDate.Date >= startDate.GetValueOrDefault().Date)
+                    .ToList();
+
+            if (endDate != null)
+                records = records
+                    .Where(record => record.RecordDate.Date <= endDate.GetValueOrDefault().Date)
+                    .ToList();
 
             Table table = new Table();
 
@@ -74,6 +86,12 @@ namespace Partidoro.Application.Cli.Commands
 
             [CommandOption("-p|--project")]
             public int? ProjectId { get; set; }
+
+            [CommandOption("-sd|--startDate")]
+            public DateTime? StartDate { get; set; }
+
+            [CommandOption("-ed|--endDate")]
+            public DateTime? EndDate { get; set; }
         }
     }
 }
