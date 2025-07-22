@@ -87,10 +87,10 @@ namespace Partidoro.Application.Cli.Commands
             [CommandOption("-p|--project")]
             public int? ProjectId { get; set; }
 
-            [CommandOption("-sd|--startDate")]
+            [CommandOption("-s|--startDate")]
             public DateTime? StartDate { get; set; }
 
-            [CommandOption("-ed|--endDate")]
+            [CommandOption("-e|--endDate")]
             public DateTime? EndDate { get; set; }
         }
     }
